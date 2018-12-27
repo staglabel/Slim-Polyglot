@@ -393,8 +393,8 @@ class Polyglot
     {
         $strip = ( isset($language) ? $language : $this->getLanguage() );
 
-        if ( strlen($strip) > 1 && strpos($path, $strip) === 0 ) {
-            $path = substr($path, strlen($strip));
+       if ( strlen($strip) > 1 && ($start = strpos($path, $strip)) !== false) {
+            $path = substr($path, $start + strlen($strip));
         }
 
         return $path;
