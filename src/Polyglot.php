@@ -549,7 +549,7 @@ class Polyglot
 
         /* If request path is matches ignore should not authenticate. */
         foreach ((array)$this->ignorePaths as $ignorePath) {
-            $ignorePath = rtrim(ignorePath, "/");
+            $ignorePath = rtrim($ignorePath, "/");
             if (!!preg_match("@^{$ignorePath}(/.*)?$@", $uri)) {
                 return true;
             }
