@@ -136,7 +136,7 @@ class Polyglot
      *
      * @var boolean
      */
-    protected $ignorePath = null;
+    protected $ignorePaths = null;
 
 
     /**
@@ -205,7 +205,7 @@ class Polyglot
             'languageRequiredInUri'    => null,
             'languageIncludedInRoutes' => null,
             'saveInSession'            => true,
-            'ignorePath'               => null,
+            'ignorePaths'               => null,
         ];
 
         $args = array_merge($default_args, $options);
@@ -260,8 +260,8 @@ class Polyglot
             $this->saveInSession = $saveInSession;
         }
 
-        if (!empty($ignorePath)) {
-            $this->ignorePath = is_array($ignorePath)? $ignorePath : [$ignorePath];
+        if (!empty($ignorePaths)) {
+            $this->ignorePaths = is_array($ignorePaths)? $ignorePaths : [$ignorePaths];
         }
     }
 
@@ -296,7 +296,7 @@ class Polyglot
         /** @var boolean Whether a ignore is requested. This determines if the current request
          *               will move on the next middleware or will be interrupted.
          */
-        $ignorePath = false;
+        $ignorePaths = false;
 
         /** @var string For manipulation later on in this method. */
         $uri = $request->getUri()->withUserInfo('');
@@ -310,7 +310,7 @@ class Polyglot
         }
 
         /** If the language is required, make sure the URI has it. */
-        if ($this->ignorePath && $this->getIgnorePath($request)) {
+        if ($this->ignorePaths && $this->getIgnorePath($request)) {
 
             if ( empty($language) ) {
                 /** @var string Retrieve a language from the client's headers. */
@@ -322,7 +322,7 @@ class Polyglot
                 $language = $fallback;
             }
 
-            $ignorePath = true;
+            $ignorePaths = true;
         }
         elseif ( empty($language) ) {
             /** @var string Retrieve a language from the client's headers. */
@@ -368,7 +368,7 @@ class Polyglot
             $redirected = true;
         }
 
-        if ( ! $ignorePath && ! $redirected && ! $this->isLanguageIncludedInRoutes() ) {
+        if ( ! $ignorePaths && ! $redirected && ! $this->isLanguageIncludedInRoutes() ) {
 
             $path = $this->stripLanguage( $uri->getPath(), $language);
 
@@ -548,7 +548,7 @@ class Polyglot
         $uri = preg_replace("#/+#", "/", $uri);
 
         /* If request path is matches ignore should not authenticate. */
-        foreach ((array)$this->ignorePath as $ignorePath) {
+        foreach ((array)$this->ignorePaths as $ignorePath) {
             $ignorePath = rtrim($ignore, "/");
             if (!!preg_match("@^{$ignorePath}(/.*)?$@", $uri)) {
                 return true;
