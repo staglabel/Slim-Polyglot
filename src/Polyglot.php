@@ -134,9 +134,16 @@ class Polyglot
     /**
      * Whether to save and reuse the result of language calculations between different runs.
      *
-     * @var boolean
+     * @var array
      */
     protected $ignorePaths = null;
+    
+    /**
+     * Resolve language from header key. Use for rest api language
+     *
+     * @var string
+     */
+    protected $headerKey = null;
 
 
     /**
