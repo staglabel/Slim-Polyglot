@@ -206,6 +206,7 @@ class Polyglot
             'languageIncludedInRoutes' => null,
             'saveInSession'            => true,
             'ignorePaths'               => null,
+            'headerKey'                 => null,
         ];
 
         $args = array_merge($default_args, $options);
@@ -262,6 +263,10 @@ class Polyglot
 
         if (!empty($ignorePaths)) {
             $this->ignorePaths = is_array($ignorePaths)? $ignorePaths : [$ignorePaths];
+        }
+
+        if (!empty($headerKey) && is_string($headerKey)) {
+            $this->headerKey = $headerKey;
         }
     }
 
@@ -521,6 +526,10 @@ class Polyglot
      */
     protected function getFromQuery(ServerRequestInterface $request)
     {
+        if ($this->headerKey && ($language = $request->getHeaderLine($this->headerKey))) {
+            return $language;
+        }
+
         $params = array_intersect_key($request->getQueryParams(), array_flip($this->getQueryKeys()));
         $regex  = '~^\/?' . $this->getRegEx() . '\b~';
 
